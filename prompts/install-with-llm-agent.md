@@ -11,6 +11,7 @@ Read the Session Guardian repository first:
 - versions/session-guardian-lite.md
 - versions/session-guardian-standalone.md
 - docs/update-safety.md
+- examples/harness-install-examples.md
 - templates/gitignore-additions.txt
 
 Detect this project's agent environment.
@@ -23,7 +24,7 @@ If the project uses OMO, oh-my-openagent, or oh-my-opencode:
 If the project uses Codex CLI, VS Code agents, Cursor, Claude-style agents, vanilla opencode, or no OMO lifecycle layer:
 - Install Guardian Standalone.
 
-Prefer project-level instruction files such as AGENTS.md, CLAUDE.md, CODEX.md, or the harness-specific project rules file.
+Prefer project-level instruction files such as AGENTS.md, CLAUDE.md, CODEX.md, or the harness-specific project rules file. Use examples/harness-install-examples.md as guidance for where the selected edition should go.
 
 Add missing ignore rules from templates/gitignore-additions.txt.
 

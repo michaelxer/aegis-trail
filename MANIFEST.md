@@ -8,8 +8,13 @@ Session Guardian is intentionally docs-first.
 | --- | --- | --- |
 | `README.md` | Public | Project overview and feature comparison. |
 | `INSTALL.md` | Public | LLM-agent installation guide. |
+| `LICENSE` | Public | MIT license for reuse and contributions. |
 | `versions/session-guardian-lite.md` | Public | OMO-friendly edition. |
 | `versions/session-guardian-standalone.md` | Public | Original full lifecycle edition under the Standalone name. |
+| `examples/guardian-lite-in-agents.md` | Public | Example Lite snippet for project instruction files. |
+| `examples/guardian-standalone-in-agents.md` | Public | Example Standalone snippet for project instruction files. |
+| `examples/harness-install-examples.md` | Public | Harness-specific install examples. |
+| `examples/safe-handoff-example.md` | Public | Secret-safe handoff example. |
 | `commands/guardian-checkpoint.md` | Public | Checkpoint workflow. |
 | `commands/guardian-handoff.md` | Public | Handoff workflow. |
 | `commands/guardian-rescue.md` | Public | Context-loss recovery workflow. |

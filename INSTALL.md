@@ -14,17 +14,18 @@ Read the Session Guardian repository first:
 - versions/session-guardian-lite.md
 - versions/session-guardian-standalone.md
 - docs/update-safety.md
+- examples/harness-install-examples.md
 - templates/gitignore-additions.txt
 
 Detect the active environment:
 - If the project uses OMO / oh-my-openagent / oh-my-opencode, install Guardian Lite.
 - If the project uses Codex CLI, VS Code agent workflows, Cursor, Claude-style agents, or no OMO continuity layer, install Guardian Standalone.
 
-Install rules at project scope, preferably in AGENTS.md or the equivalent project instruction file for the current agent harness.
+Install rules at project scope, preferably in `AGENTS.md` or the equivalent project instruction file for the current agent harness.
 
 Do not modify OMO internals, node_modules, generated plugin files, hidden agent internals, or package-managed files.
 
-Add the safe ignore rules from templates/gitignore-additions.txt if they are missing.
+Add the safe ignore rules from `templates/gitignore-additions.txt` if they are missing.
 
 Do not enable auto-push unless I explicitly approve it for this repo.
 ```
@@ -40,6 +41,7 @@ Do not enable auto-push unless I explicitly approve it for this repo.
 5. Do not place real credentials in any tracked file.
 6. Do not create a git repo unless the user asks.
 7. If a git repo exists, commit only intentional Guardian installation files after checking for secrets.
+8. Report which edition was installed, which instruction file changed, and how the user should ask for checkpoint, handoff, and rescue behavior.
 
 ## OMO Installation Notes
 
@@ -76,6 +78,12 @@ Good targets:
 - other coding agents with project instruction files
 
 Standalone includes its own handoff and context heuristics, so it is intentionally larger than Lite.
+
+## Harness Examples
+
+Use `examples/harness-install-examples.md` for practical install targets, including OMO/opencode, Codex CLI, VS Code agent workflows, Cursor, and Claude-style agents.
+
+The examples are not separate editions. They show where the same Lite or Standalone policy usually belongs in each harness.
 
 ## Updating Session Guardian
 
