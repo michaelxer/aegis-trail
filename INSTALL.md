@@ -13,13 +13,22 @@ https://github.com/michaelxer/aegis-trail
 Paste this into your coding agent from the target project:
 
 ```text
-Install and configure Aegis Trail by following the instructions here:
+Install Aegis Trail for this project.
 https://raw.githubusercontent.com/michaelxer/aegis-trail/refs/heads/main/INSTALL.md
+```
+
+That is the whole user-facing prompt. The agent should read this file and follow the instructions below.
+
+## Source Files
 
 Use this public repository as the source of truth:
+
+```text
 https://github.com/michaelxer/aegis-trail
+```
 
 Fetch and read these Aegis Trail files from the public repository before editing the target project:
+
 - README.md
 - INSTALL.md
 - versions/aegis-trail-lite.md
@@ -29,7 +38,10 @@ Fetch and read these Aegis Trail files from the public repository before editing
 - examples/harness-install-examples.md
 - templates/gitignore-additions.txt
 
+## Install Rules
+
 Detect the active environment:
+
 - If the project uses Magic Context by CortexKit, install Aegis Trail Lite / Magic Context compatibility mode. Do not install Standalone context heuristics.
 - If the project uses OMO / oh-my-openagent / oh-my-opencode, install Aegis Trail Lite.
 - If the project uses Codex CLI, VS Code agent workflows, Cursor, Claude-style agents, or no continuity/context layer, install Aegis Trail Standalone.
@@ -46,7 +58,6 @@ Add the safe ignore rules from `templates/gitignore-additions.txt` if they are m
 Do not create a git repo unless I explicitly ask. Do not enable auto-push unless I explicitly approve it for this repo.
 
 After installation, tell me which edition was installed, which files changed, and how to trigger checkpoint, handoff, and rescue behavior.
-```
 
 ## What The Agent Should Do
 

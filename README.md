@@ -72,7 +72,7 @@ Installation is intentionally done by an LLM coding agent, not by a fragile shel
 
 Aegis Trail does not install Magic Context automatically by default. For opencode projects that need memory/context support, install Magic Context from CortexKit upstream first, then run the Aegis Trail install prompt so the agent detects Magic Context and installs Lite/compatibility mode.
 
-Paste the install prompt from `prompts/install-with-llm-agent.md` into the agent that manages your target project. The agent should read this public repository first, detect your environment, and install the right edition into the correct project instruction file.
+Paste the short prompt from `prompts/install-with-llm-agent.md` into the agent that manages your target project. The agent should read `INSTALL.md`, detect your environment, and install the right edition into the correct project instruction file.
 
 Recommended defaults:
 
@@ -91,30 +91,11 @@ Examples are included in `examples/` if you want to see what an installed Aegis 
 
 Agent-guided install.
 
-Paste this into your LLM coding agent session from the project you want to protect. The agent will read the public Aegis Trail install guide first, ask setup questions in chat only if the environment is unclear, then install the right edition into project-level instructions.
+Paste this into your LLM coding agent session from the project you want to protect:
 
 ```text
-Install and configure Aegis Trail by following the instructions here:
+Install Aegis Trail for this project.
 https://raw.githubusercontent.com/michaelxer/aegis-trail/refs/heads/main/INSTALL.md
-
-Use this public repository as the source of truth:
-https://github.com/michaelxer/aegis-trail
-
-Fetch and read the relevant files from that repository before editing this project, especially README.md, INSTALL.md, versions/aegis-trail-lite.md, versions/aegis-trail-standalone.md, docs/magic-context-compatibility.md, docs/update-safety.md, examples/harness-install-examples.md, and templates/gitignore-additions.txt.
-
-Install it for the current project only.
-
-If this project uses Magic Context by CortexKit, install Aegis Trail Lite / Magic Context compatibility mode. Do not install Aegis Trail Standalone context heuristics. Do not copy, vendor, fork, or replace Magic Context. Keep Magic Context installed and updated from upstream.
-
-If this project uses OMO, oh-my-openagent, or oh-my-opencode, install Aegis Trail Lite.
-
-Otherwise install Aegis Trail Standalone unless you find another existing continuity layer and need to ask me first.
-
-Do not modify OMO internals, Magic Context internals, node_modules, generated plugin files, hidden agent internals, or package-managed files. Prefer project-level agent instruction files such as AGENTS.md, CLAUDE.md, CODEX.md, or the harness-specific project rules file.
-
-Add the safe ignore rules if they are missing. Do not create a git repo unless I explicitly ask. Do not enable auto-push unless I explicitly approve it for this repo.
-
-After installation, tell me which edition was installed, which files changed, and how to trigger checkpoint, handoff, and rescue behavior.
 ```
 
 ## Files
