@@ -1,11 +1,11 @@
-# Example: Aegis Trail Standalone In AGENTS.md
+# Example: Aegis Trail Standalone In Agent Instructions
 
-Use this as a model for Codex CLI, VS Code agent workflows, Cursor, Claude-style agents, vanilla opencode, or another agent that does not already provide OMO-style continuity or Magic Context-style memory/context management.
+Use this as a model for Codex CLI, VS Code agent workflows, Cursor, Claude-style agents, vanilla opencode, or another agent that does not already provide OMO-style continuity or Magic Context-style memory/context management. Install it in global/user instructions by default, or as a project-level override only when explicitly requested or when the harness has no usable global instruction target.
 
 ```md
 ## Aegis Trail Standalone
 
-Aegis Trail Standalone is active for this project.
+Aegis Trail Standalone is active for this agent environment. When working inside a project, apply these rules to that project.
 
 Do not use this Standalone policy when Magic Context by CortexKit is active. Use Aegis Trail Lite / Magic Context compatibility mode instead.
 

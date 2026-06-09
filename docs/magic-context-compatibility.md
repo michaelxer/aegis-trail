@@ -10,9 +10,9 @@ Aegis Trail handles a different lane: local git checkpoints, secret-safe staging
 
 Do not copy, vendor, fork, or replace Magic Context as part of a normal Aegis Trail install.
 
-Aegis Trail's LLM install prompt does not install Magic Context automatically by default. It only detects Magic Context when it is already present and then installs Aegis Trail compatibility rules.
+Aegis Trail's LLM install prompt does not install Magic Context automatically by default. It only detects Magic Context when it is already present and then installs Aegis Trail compatibility rules into global/user agent instructions by default.
 
-If Magic Context is not detected for an OpenCode or Pi project, the Aegis Trail installer should say so in its guided questions before editing. The user can then proceed without Magic Context, stop, or explicitly ask for a separate upstream Magic Context user/harness setup first. For Codex CLI, VS Code agents, Cursor, Claude-style agents, or other non-OpenCode/non-Pi harnesses, do not offer Magic Context as a normal setup choice unless the user explicitly asks to check CortexKit upstream first.
+If Magic Context is not detected for an OpenCode or Pi environment, the Aegis Trail installer should say so in its guided questions before editing. The user can then proceed without Magic Context, stop, or explicitly ask for a separate upstream Magic Context user/harness setup first. For Codex CLI, VS Code agents, Cursor, Claude-style agents, or other non-OpenCode/non-Pi harnesses, do not offer Magic Context as a normal setup choice unless the user explicitly asks to check CortexKit upstream first.
 
 Use CortexKit upstream for Magic Context:
 
@@ -58,14 +58,14 @@ When Magic Context is detected, install Aegis Trail Lite / Magic Context compati
 
 ## Install Rules
 
-When installing Aegis Trail into a Magic Context project:
+When installing Aegis Trail for a Magic Context environment:
 
 1. Keep Magic Context installed from CortexKit upstream as the user/harness-level context layer.
-2. Install `versions/aegis-trail-lite.md` or the example in `examples/aegis-trail-with-magic-context.md` into the active project instruction file.
+2. Install `versions/aegis-trail-lite.md` or the example in `examples/aegis-trail-with-magic-context.md` into the active global/user instruction file by default.
 3. Do not install `versions/aegis-trail-standalone.md` unless the user explicitly wants duplicate manual lifecycle rules.
 4. Do not edit Magic Context package files, generated files, `node_modules/`, or hidden agent internals.
-5. Add missing safe ignore rules from `templates/gitignore-additions.txt`.
-6. Keep auto-push disabled unless the user explicitly approves it for the current repo.
+5. Use project instruction files only as an explicit project-specific override or when the harness has no usable global instruction target.
+6. Keep auto-push disabled unless the user explicitly approves it for a specific repo.
 
 ## Opencode Workflow
 
@@ -73,8 +73,8 @@ For opencode, use this order when you want both tools:
 
 1. Set up Magic Context from CortexKit upstream using its official OpenCode/Pi setup flow.
 2. Confirm Magic Context is visible through user-level plugin/config entries or project configuration such as `magic-context.jsonc`, `.opencode/magic-context.jsonc`, or an `opencode.json` plugin entry for `@cortexkit/opencode-magic-context`.
-3. Run the Aegis Trail LLM install prompt from the target project.
-4. The agent should detect Magic Context and install Aegis Trail Lite / Magic Context compatibility mode in that project's instruction file.
+3. Run the Aegis Trail LLM install prompt from an agent session that can edit global/user instructions.
+4. The agent should detect Magic Context and install Aegis Trail Lite / Magic Context compatibility mode in the global/user instruction file.
 5. The agent should not install Aegis Trail Standalone context heuristics.
 
 If Magic Context is not installed yet, Aegis Trail should not silently install it. The agent may offer the user the upstream Magic Context setup as a separate step, but should only run it after explicit approval.

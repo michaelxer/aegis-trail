@@ -1,8 +1,8 @@
 # Installing Aegis Trail
 
-Aegis Trail is installed by an LLM coding agent because every harness stores instructions differently. The public Aegis Trail repository is the global/latest source of truth, so the agent should fetch it instead of trusting an old local install. Normal Aegis Trail installation still writes rules into the target project's instruction file; it should not edit global agent or harness config unless the user explicitly asks for that separate setup.
+Aegis Trail is installed by an LLM coding agent because every harness stores global/user instructions differently. The public Aegis Trail repository is the global/latest source of truth, so the agent should fetch it instead of trusting an old local install. Normal Aegis Trail installation writes rules into the user's global agent or harness instruction file so the safety policy follows future work across projects. It should not edit the current repo unless the user explicitly asks for a project-level override or the harness has no usable global instruction target.
 
-The agent should read the public Aegis Trail repository, detect the active environment, ask the required scenario-specific setup questions, and place the correct Aegis Trail edition in a project-level instruction file only after the user answers.
+The agent should read the public Aegis Trail repository, detect the active environment, ask the required scenario-specific setup questions, and place the correct Aegis Trail edition in a global/user-level instruction file only after the user answers.
 
 Source repository:
 
@@ -12,10 +12,10 @@ https://github.com/michaelxer/aegis-trail
 
 ## Recommended Install Method
 
-Paste this into your coding agent from the target project:
+Paste this into a coding agent session that can edit your global/user agent instructions:
 
 ```text
-Install Aegis Trail for this project.
+Install Aegis Trail globally for my coding agent environment.
 https://raw.githubusercontent.com/michaelxer/aegis-trail/refs/heads/main/INSTALL.md
 ```
 
@@ -29,7 +29,7 @@ Use this public repository as the source of truth:
 https://github.com/michaelxer/aegis-trail
 ```
 
-Fetch and read these Aegis Trail files from the public repository before editing the target project:
+Fetch and read these Aegis Trail files from the public repository before editing any install target:
 
 - README.md
 - INSTALL.md
@@ -48,20 +48,21 @@ Do not ask about git commits, pushes, or repo creation during a normal install. 
 
 ### Step 0: Detect And Report
 
-After reading the source files and inspecting the target project, report what was detected:
+After reading the source files and inspecting the active agent environment, report what was detected:
 
 ```text
-I checked this project and found:
+I checked this agent environment and found:
 
 - Aegis Trail source: public global repo at https://github.com/michaelxer/aegis-trail
 - Harness: <OpenCode, Pi, Codex CLI, VS Code agent, Cursor, Claude-style agent, or unknown>
-- Instruction target: <existing instruction file or file to create>
+- Global/user instruction target: <existing instruction file or file to create>
+- Project instruction fallback: <available, not needed, or unavailable>
 - OMO: <detected or not detected>
 - Magic Context: <detected or not detected>
 - Other continuity layer: <detected, not detected, or unclear>
-- Git repo: <yes or no>
+- Current workspace git repo: <yes or no; not used for normal install decisions>
 - Recommended Aegis Trail edition: <Lite, Magic Context compatibility, or Standalone>
-- Expected files to change: <instruction file and .gitignore if needed>
+- Expected files to change: <global/user instruction file only by default>
 
 Before I edit anything, I need the setup choices below.
 ```
@@ -73,7 +74,7 @@ Magic Context is a separate upstream CortexKit project currently documented for 
 For OpenCode or Pi when Magic Context is not detected, ask:
 
 ```text
-Question 1: Do you want to set up Magic Context for your OpenCode/Pi environment before installing Aegis Trail here?
+Question 1: Do you want to set up Magic Context for your OpenCode/Pi environment before installing Aegis Trail globally?
 
 1. Yes, pause Aegis Trail and help me run the separate upstream Magic Context setup for this harness first.
 2. No, continue without Magic Context for now.
@@ -84,12 +85,12 @@ If the user chooses Magic Context first, pause the Aegis Trail install. Treat Ma
 
 ### Step 2: Ask The Edition Question For The Detected Scenario
 
-Only include choices that make sense for the detected project.
+Only include choices that make sense for the detected agent environment.
 
 For OpenCode with OMO and no Magic Context:
 
 ```text
-Question 2: Which Aegis Trail mode do you want for this OpenCode + OMO project?
+Question 2: Which Aegis Trail mode do you want for this OpenCode + OMO environment?
 
 1. Use Aegis Trail Lite for OMO. Recommended.
 2. Use Aegis Trail Standalone anyway. Not recommended because OMO already handles lifecycle/context.
@@ -99,7 +100,7 @@ Question 2: Which Aegis Trail mode do you want for this OpenCode + OMO project?
 For OpenCode with OMO and Magic Context detected:
 
 ```text
-Question 2: Which Aegis Trail mode do you want for this OpenCode project with OMO and Magic Context?
+Question 2: Which Aegis Trail mode do you want for this OpenCode environment with OMO and Magic Context?
 
 1. Use Aegis Trail Magic Context Compatibility mode. Recommended.
 2. Use Aegis Trail Lite for OMO only. Not recommended because Magic Context is active.
@@ -110,7 +111,7 @@ Question 2: Which Aegis Trail mode do you want for this OpenCode project with OM
 For OpenCode or Pi with Magic Context detected and no OMO:
 
 ```text
-Question 2: Which Aegis Trail mode do you want for this Magic Context project?
+Question 2: Which Aegis Trail mode do you want for this Magic Context environment?
 
 1. Use Aegis Trail Magic Context Compatibility mode. Recommended.
 2. Use Aegis Trail Standalone anyway. Not recommended because Magic Context owns context and memory.
@@ -120,7 +121,7 @@ Question 2: Which Aegis Trail mode do you want for this Magic Context project?
 For OpenCode or Pi with no OMO and no Magic Context:
 
 ```text
-Question 2: Which Aegis Trail mode do you want for this project?
+Question 2: Which Aegis Trail mode do you want for this OpenCode/Pi environment?
 
 1. Use Aegis Trail Standalone. Recommended because no strong continuity/context layer was detected.
 2. Use Aegis Trail Lite anyway. Only choose this if another lifecycle/context layer exists but was not detected.
@@ -130,7 +131,7 @@ Question 2: Which Aegis Trail mode do you want for this project?
 For Codex CLI, VS Code agents, Cursor, Claude-style agents, or another harness with no detected continuity/context layer:
 
 ```text
-Question 2: Which Aegis Trail mode do you want for this project?
+Question 2: Which Aegis Trail mode do you want for this agent environment?
 
 1. Use Aegis Trail Standalone. Recommended.
 2. Use Aegis Trail Lite instead. Only choose this if another continuity/context layer already handles lifecycle, memory, handoff, and compaction.
@@ -150,28 +151,32 @@ Which mode should I use?
 4. Stop with no changes.
 ```
 
-### Step 3: Ask Instruction Target Only If Ambiguous
+### Step 3: Ask Global Instruction Target Only If Ambiguous
 
-Do not ask technical config-location questions during a normal install. If only one project instruction target is clear, use it.
+Do not ask technical config-location questions during a normal install. If only one global/user instruction target is clear, use it.
 
-If multiple plausible project instruction files exist, ask:
+If multiple plausible global/user instruction files exist, ask:
 
 ```text
-Question 3: Which project instruction file should I update?
+Question 3: Which global/user instruction file should I update?
 
-1. Update <detected primary instruction file>. Recommended.
-2. Create or update AGENTS.md.
+1. Update <detected primary global/user instruction file>. Recommended.
+2. Create or update <harness-specific global/user instruction file>.
 3. Stop with no changes.
 ```
 
+Ask about a project-level install target only when no usable global/user instruction target exists, or when the user explicitly asks for a project-specific override.
+
 ### Step 4: Use Safe Git Defaults Without Asking
 
-Do not ask a routine git behavior question during a normal Aegis Trail install. Installing Aegis Trail means editing the target project's instruction file and missing ignore rules only.
+Do not ask a routine git behavior question during a normal Aegis Trail install. Installing Aegis Trail globally means editing the global/user instruction file only.
 
 Default behavior:
 
-- If no git repo exists, install Aegis Trail without creating a repo.
-- If a git repo exists, install Aegis Trail without committing.
+- Do not edit the current repo during the global install.
+- Do not create or modify `.gitignore` during the global install.
+- Do not create a git repo.
+- Do not commit installation changes.
 - Never push installation changes.
 - Report changed files and verification results after the install.
 
@@ -186,7 +191,7 @@ I have the needed answers:
 
 - Magic Context choice: <set up upstream harness/user layer first, continue without it, already active, or not applicable>
 - Aegis Trail edition: <selected edition>
-- Instruction target: <file>
+- Instruction target: <global/user instruction file>
 - Git behavior: install only by default; no repo creation, commit, or push unless explicitly requested
 - Expected changes: <files>
 
@@ -199,26 +204,26 @@ Then edit files, verify the install, and check diffs for obvious mistakes. Do no
 
 Detect the active environment:
 
-- If the project uses Magic Context by CortexKit, install Aegis Trail Lite / Magic Context compatibility mode. Do not install Standalone context heuristics.
-- If the project uses OMO / oh-my-openagent / oh-my-opencode, install Aegis Trail Lite.
-- If the project uses Codex CLI, VS Code agent workflows, Cursor, Claude-style agents, or no continuity/context layer, install Aegis Trail Standalone.
+- If the agent environment uses Magic Context by CortexKit, install Aegis Trail Lite / Magic Context compatibility mode. Do not install Standalone context heuristics.
+- If the agent environment uses OMO / oh-my-openagent / oh-my-opencode, install Aegis Trail Lite.
+- If the agent environment uses Codex CLI, VS Code agent workflows, Cursor, Claude-style agents, or no continuity/context layer, install Aegis Trail Standalone.
 - If another continuity or memory layer is active and the right choice is unclear, ask me before editing.
 
-Install rules for the current project only, preferably in `AGENTS.md` or the equivalent project instruction file for the current agent harness.
+Install rules globally for the current user or harness, preferably in the global instruction file the active agent reads. Use a project instruction file only if the harness has no global/user instruction target or the user explicitly asks for a project-specific override.
 
 Do not modify OMO internals, Magic Context internals, node_modules, generated plugin files, hidden agent internals, or package-managed files.
 
 Do not copy, vendor, fork, or replace Magic Context. If Magic Context is needed, use the upstream CortexKit project separately.
 
-Add the safe ignore rules from `templates/gitignore-additions.txt` if they are missing.
+Do not add ignore rules during the global install. The installed Aegis Trail rules should require safe ignore entries from `templates/gitignore-additions.txt` when Aegis Trail later operates inside a repo, and the agent may add them then as part of normal project work.
 
-Do not create a git repo unless I explicitly ask. Do not enable auto-push unless I explicitly approve it for this repo.
+Do not create a git repo unless I explicitly ask. Do not enable auto-push unless I explicitly approve it for a specific repo.
 
 After installation, tell me which edition was installed, which files changed, and how to trigger checkpoint, handoff, and rescue behavior.
 
 ## What The Agent Should Do
 
-1. Detect whether a project instruction file exists, such as `AGENTS.md`, `CLAUDE.md`, `CODEX.md`, or a harness-specific rules file.
+1. Detect the global/user instruction file for the active harness, such as user-level OpenCode instructions, global Codex/Claude agent guidance, or the harness-specific global rules file.
 2. Treat the public Aegis Trail repository as the source of truth; do not copy rules forward from an old local Aegis Trail install unless they match the fetched source.
 3. Detect whether Magic Context is active by looking for `magic-context.jsonc`, `.opencode/magic-context.jsonc`, `@cortexkit/opencode-magic-context`, `@cortexkit/magic-context`, `@cortexkit/pi-magic-context`, or user/project OpenCode or Pi plugin entries for Magic Context.
 4. Detect whether OMO / oh-my-openagent / oh-my-opencode or another strong continuity layer is active.
@@ -228,12 +233,12 @@ After installation, tell me which edition was installed, which files changed, an
 8. Use Aegis Trail Standalone when no continuity/context layer is active or the user wants the full original workflow.
 9. Ask the required guided questions and wait for the user's answers before editing.
 10. If the user chooses to set up Magic Context first, pause the Aegis Trail install and handle Magic Context only as a separate upstream harness/user-level setup with explicit approval.
-11. Add the selected Aegis Trail text to the project instruction file after the required answers are complete.
-12. Add missing `.gitignore` entries from `templates/gitignore-additions.txt`.
+11. Add the selected Aegis Trail text to the global/user instruction file after the required answers are complete.
+12. Do not add `.gitignore` entries during the global install; Aegis Trail will require them when operating inside each project.
 13. Do not place real credentials in any tracked file or Magic Context memory/note.
 14. Do not create a git repo unless the user asks.
 15. If the user explicitly requested an installation commit, stage only intentional Aegis Trail installation files and check staged content for secrets before committing.
-16. Report which edition was installed, which instruction file changed, and how the user should ask for checkpoint, handoff, and rescue behavior.
+16. Report which edition was installed, which global/user instruction file changed, and how the user should ask for checkpoint, handoff, and rescue behavior.
 
 ## Magic Context Installation Notes
 
@@ -243,14 +248,14 @@ Aegis Trail does not ship Magic Context. Install and update Magic Context from C
 
 Magic Context setup is separate from Aegis Trail and is usually user-level or harness-level for OpenCode/Pi, not a one-project-only Aegis Trail install. One Magic Context setup can serve multiple projects through Magic Context's shared local store and project identity scoping. Individual projects may still add `magic-context.jsonc` or `.opencode/magic-context.jsonc` to override defaults.
 
-Aegis Trail's LLM install prompt does not install Magic Context automatically by default. If Magic Context is not already present for an OpenCode or Pi project, the installer should say so in the guided questions, should explain that Magic Context setup may affect the user's wider OpenCode/Pi environment, should not copy or vendor it, and should not run Magic Context setup unless the user explicitly asks for that separate upstream setup.
+Aegis Trail's LLM install prompt does not install Magic Context automatically by default. If Magic Context is not already present for an OpenCode or Pi environment, the installer should say so in the guided questions, should explain that Magic Context setup may affect the user's wider OpenCode/Pi environment, should not copy or vendor it, and should not run Magic Context setup unless the user explicitly asks for that separate upstream setup.
 
 Recommended opencode workflow:
 
 1. Set up Magic Context from CortexKit upstream if you want memory/context support across your OpenCode/Pi environment.
 2. Confirm Magic Context is visible through user-level plugin/config entries or project configuration such as `magic-context.jsonc`, `.opencode/magic-context.jsonc`, or `@cortexkit/opencode-magic-context`.
-3. Run the Aegis Trail LLM install prompt from the target project.
-4. Let Aegis Trail detect Magic Context and install Lite / Magic Context compatibility mode for that project.
+3. Run the Aegis Trail LLM install prompt from an agent session that can edit global/user instructions.
+4. Let Aegis Trail detect Magic Context and install Lite / Magic Context compatibility mode globally for that agent environment.
 5. Keep Magic Context responsible for context and memory across supported projects, and keep Aegis Trail responsible for per-project git checkpoints, secrets, the numbered `HANDOFF_DOC/handoff-NNN.md` trail, and push safety.
 
 When Magic Context is active, Aegis Trail should not add competing context-management instructions. Do not add Standalone context heuristics, duplicate compaction rules, or instructions that fight Magic Context's historian, dreamer, recall, or compaction replacement behavior.
@@ -260,7 +265,7 @@ Aegis Trail should add only the safety layer:
 - local git checkpoint discipline
 - secret/private-data protection for files, commits, handoffs, `ctx_memory`, and `ctx_note`
 - no-auto-push defaults
-- numbered `HANDOFF_DOC/handoff-NNN.md` handoff trail and rescue discipline
+- numbered per-project `HANDOFF_DOC/handoff-NNN.md` handoff trail and rescue discipline
 
 If Magic Context reports a setup conflict, use Magic Context's upstream setup or doctor guidance. Do not patch Magic Context source files from Aegis Trail.
 
@@ -298,7 +303,7 @@ Good targets:
 - Cursor
 - Claude-style project agents
 - vanilla opencode without OMO or Magic Context
-- other coding agents with project instruction files
+- other coding agents with global/user instruction files
 
 Standalone includes its own handoff and context heuristics, so it is intentionally larger than Lite.
 
@@ -315,6 +320,6 @@ Aegis Trail should be update-safe because it is not installed inside OMO, Magic 
 To update:
 
 1. Pull or download the latest Aegis Trail repo.
-2. Ask your coding agent to compare the installed project rules with the new version.
-3. Keep project-specific local policies intact.
+2. Ask your coding agent to compare the installed global/user rules with the new version.
+3. Keep project-specific local overrides intact.
 4. Re-run the smoke test from `docs/update-safety.md`.

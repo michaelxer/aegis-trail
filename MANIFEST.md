@@ -12,8 +12,8 @@ Aegis Trail is intentionally docs-first.
 | `versions/aegis-trail-lite.md` | Public | OMO/Magic Context-friendly edition. |
 | `versions/aegis-trail-standalone.md` | Public | Full lifecycle edition for projects without continuity/context management. |
 | `docs/magic-context-compatibility.md` | Public | CortexKit credit, compatibility mode, and no-vendoring policy. |
-| `examples/aegis-trail-lite-in-agents.md` | Public | Example Lite snippet for project instruction files. |
-| `examples/aegis-trail-standalone-in-agents.md` | Public | Example Standalone snippet for project instruction files. |
+| `examples/aegis-trail-lite-in-agents.md` | Public | Example Lite snippet for global/user instruction files. |
+| `examples/aegis-trail-standalone-in-agents.md` | Public | Example Standalone snippet for global/user instruction files. |
 | `examples/aegis-trail-with-magic-context.md` | Public | Example Magic Context compatibility snippet. |
 | `examples/harness-install-examples.md` | Public | Harness-specific install examples. |
 | `examples/safe-handoff-example.md` | Public | Secret-safe handoff example. |

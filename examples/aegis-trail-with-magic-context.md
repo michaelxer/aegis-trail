@@ -1,6 +1,6 @@
 # Example: Aegis Trail With Magic Context
 
-Use this as a model for a project instruction file when [Magic Context by CortexKit](https://github.com/cortexkit/magic-context) is installed.
+Use this as a model for global/user agent instructions when [Magic Context by CortexKit](https://github.com/cortexkit/magic-context) is installed. It can also be used as a project-level override when explicitly requested or when the harness has no usable global instruction target.
 
 ```md
 ## Aegis Trail Magic Context Compatibility

@@ -4,7 +4,7 @@
 
 Aegis Trail is a docs-first prompt kit for AI coding agents. It keeps coding sessions recoverable by adding local git checkpoints, secret-safe handoff discipline, no-auto-push defaults, and rescue instructions for the next chat.
 
-It is installed as project-level guidance beside systems like OMO, opencode, Codex CLI, Cursor, Claude-style agents, VS Code agent workflows, and memory/context engines. It does not patch agent internals or package-managed files.
+By default, it is installed as global/user-level agent guidance so the same safety rules follow your coding agent across projects. Project-level installs are only an explicit override or fallback for harnesses that cannot read global instructions. It does not patch agent internals or package-managed files.
 
 ## Compatibility Credits
 
@@ -80,11 +80,11 @@ Use the rescue prompt when a session already lost context. The next agent should
 
 Installation is intentionally done by an LLM coding agent, not by a fragile shell script or `npx` package.
 
-The short prompt points the agent at `INSTALL.md`. The agent should read the install guide, detect the project, then ask OMC-style setup questions before editing files. The questions should cover the detected harness, instruction target, Magic Context status when relevant, selected edition, and expected file changes. Normal installation edits project instruction and ignore files only; it should not ask a routine git question, create a repo, commit, or push unless the user explicitly requested that separate git action.
+The short prompt points the agent at `INSTALL.md`. The agent should read the install guide, detect the active harness and global/user instruction target, then ask OMC-style setup questions before editing files. The questions should cover the detected harness, install target, Magic Context status when relevant, selected edition, and expected file changes. Normal installation edits global/user agent instructions only; it should not edit the current repo, ask a routine git question, create a repo, commit, or push unless the user explicitly requested that separate action.
 
-Aegis Trail's public installer is global, but the installed Aegis Trail rules are intentionally project-level so each repo can keep its own safety and handoff policy. Aegis Trail does not install Magic Context automatically by default. Magic Context is a separate CortexKit upstream project currently documented for OpenCode and Pi; its setup is user/harness-level and can serve multiple projects through Magic Context's shared store, with optional per-project config overrides. For OpenCode or Pi projects that need memory/context support, set up Magic Context from CortexKit upstream first, then run the Aegis Trail install prompt so the agent detects Magic Context and installs Lite/compatibility mode in the target project. For Codex CLI, VS Code agents, Cursor, and Claude-style agents, Aegis Trail should not offer Magic Context as a normal setup choice unless the user explicitly asks to check CortexKit upstream first.
+Aegis Trail's public installer and normal install scope are global. The installed rules are user/harness-level by default so one install can protect future work across projects. Each repo still keeps its own local git history, ignore rules, and `HANDOFF_DOC/handoff-NNN.md` trail when Aegis Trail operates there. Project-level Aegis Trail rules are only an explicit override or fallback. Aegis Trail does not install Magic Context automatically by default. Magic Context is a separate CortexKit upstream project currently documented for OpenCode and Pi; its setup is user/harness-level and can serve multiple projects through Magic Context's shared store, with optional per-project config overrides. For OpenCode or Pi environments that need memory/context support, set up Magic Context from CortexKit upstream first, then run the Aegis Trail install prompt so the agent detects Magic Context and installs Lite/compatibility mode globally for that agent environment. For Codex CLI, VS Code agents, Cursor, and Claude-style agents, Aegis Trail should not offer Magic Context as a normal setup choice unless the user explicitly asks to check CortexKit upstream first.
 
-Paste the short prompt from `prompts/install-with-llm-agent.md` into the agent that manages your target project. The agent should read `INSTALL.md`, detect your environment, ask the scenario-specific setup questions, and install the right edition into the correct project instruction file only after the required answers are complete.
+Paste the short prompt from `prompts/install-with-llm-agent.md` into an agent session that can edit your global/user agent instructions. The current repo is not the default install target. The agent should read `INSTALL.md`, detect your environment, ask the scenario-specific setup questions, and install the right edition into the correct global/user instruction file only after the required answers are complete.
 
 Recommended defaults:
 
@@ -103,10 +103,10 @@ Examples are included in `examples/` if you want to see what an installed Aegis 
 
 Agent-guided install.
 
-Paste this into your LLM coding agent session from the project you want to protect:
+Paste this into an LLM coding agent session that can edit your global/user agent instructions:
 
 ```text
-Install Aegis Trail for this project.
+Install Aegis Trail globally for my coding agent environment.
 https://raw.githubusercontent.com/michaelxer/aegis-trail/refs/heads/main/INSTALL.md
 ```
 
@@ -119,9 +119,9 @@ The agent should respond with a short install preview and wait for your answer b
 | `versions/aegis-trail-lite.md` | Lightweight rules for OMO, Magic Context, and other continuity layers. |
 | `versions/aegis-trail-standalone.md` | Full lifecycle rules for projects without a continuity/context manager. |
 | `docs/magic-context-compatibility.md` | Compatibility policy, CortexKit credit, detection, and boundaries. |
-| `examples/aegis-trail-lite-in-agents.md` | Example project-level Lite installation snippet. |
-| `examples/aegis-trail-standalone-in-agents.md` | Example project-level Standalone installation snippet. |
-| `examples/aegis-trail-with-magic-context.md` | Example project-level Magic Context compatibility snippet. |
+| `examples/aegis-trail-lite-in-agents.md` | Example Lite rules snippet for global/user instructions or an explicit project fallback. |
+| `examples/aegis-trail-standalone-in-agents.md` | Example Standalone rules snippet for global/user instructions or an explicit project fallback. |
+| `examples/aegis-trail-with-magic-context.md` | Example Magic Context compatibility snippet for global/user instructions or an explicit project fallback. |
 | `examples/harness-install-examples.md` | Harness-specific install examples. |
 | `examples/safe-handoff-example.md` | Example handoff that avoids secrets. |
 | `commands/aegis-checkpoint.md` | Checkpoint workflow template. |

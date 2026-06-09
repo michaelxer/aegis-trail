@@ -1,11 +1,11 @@
-# Example: Aegis Trail Lite In AGENTS.md
+# Example: Aegis Trail Lite In Agent Instructions
 
-Use this as a model for an OMO, oh-my-openagent, oh-my-opencode, Magic Context, or strong continuity-layer project instruction file.
+Use this as a model for an OMO, oh-my-openagent, oh-my-opencode, Magic Context, or strong continuity-layer global/user instruction file. It can also be used as a project-level override when the user explicitly wants one or the harness has no usable global instruction target.
 
 ```md
 ## Aegis Trail Lite
 
-Aegis Trail Lite is active for this project.
+Aegis Trail Lite is active for this agent environment. When working inside a project, apply these rules to that project.
 
 Use the active lifecycle layer for planning, task persistence, continuation, handoff, compaction, memory, and recovery. Do not modify OMO internals, Magic Context internals, generated prompts, `node_modules/`, or package-managed plugin files.
 

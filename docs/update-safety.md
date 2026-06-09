@@ -18,18 +18,17 @@ Avoid modifying:
 
 ## Stable Integration Surfaces
 
-Use stable project-level files:
+Use stable global/user-level instruction files when the harness supports them:
 
 ```text
-AGENTS.md
-CLAUDE.md
-CODEX.md
-.cursor/rules/
-.windsurf/rules/
-other project instruction files
+OpenCode user/global instructions
+Codex user/global instructions
+Claude user/global instructions
+Cursor user/global rules
+VS Code extension user/global instructions
 ```
 
-For opencode, OMO, or Magic Context projects, prefer `AGENTS.md` or native project instruction files over editing OMO or Magic Context internals.
+For OpenCode, OMO, or Magic Context environments, prefer user/global instruction files over editing OMO or Magic Context internals. Use project instruction files only as an explicit project-specific override or when the harness has no usable global instruction target.
 
 ## Core And Adapter Pattern
 
@@ -53,7 +52,7 @@ After updating OMO:
 3. Confirm `/handoff` still exists if you rely on it.
 4. Confirm `/start-work` still exists if you rely on it.
 5. Confirm `.omo/tasks` or active task state still behaves as expected.
-6. Confirm Aegis Trail Lite is still present in project instructions.
+6. Confirm Aegis Trail Lite is still present in global/user instructions.
 7. Confirm Aegis Trail checkpoint rules still say not to push by default.
 8. Confirm `.credentials/`, `.env`, private data, and handoff folders are ignored where appropriate.
 9. Run a dummy checkpoint in a test repo before trusting automation.
@@ -64,7 +63,7 @@ After updating Magic Context:
 
 1. Run Magic Context's upstream setup or doctor workflow if needed.
 2. Confirm Magic Context still owns context management, memory, recall, historian/dreamer behavior, and compaction replacement.
-3. Confirm Aegis Trail Lite / Magic Context compatibility mode is still present in project instructions.
+3. Confirm Aegis Trail Lite / Magic Context compatibility mode is still present in global/user instructions.
 4. Confirm no Aegis Trail Standalone context heuristics were added on top of Magic Context.
 5. Confirm Aegis Trail still says not to push by default.
 6. Confirm the project rules forbid secrets in `ctx_memory`, `ctx_note`, summaries, prompts, handoffs, and commits.
