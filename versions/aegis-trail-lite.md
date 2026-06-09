@@ -12,7 +12,7 @@ If Magic Context is active, let Magic Context own context management, project me
 
 Before ending meaningful project work:
 
-1. Save recovery state through the active lifecycle layer, OMO `/handoff`, or the project handoff file.
+1. Create or update the current portable handoff at `HANDOFF_DOC/handoff-NNN.md`, and use the active lifecycle handoff too if available, such as OMO `/handoff`.
 2. If a git repo exists, checkpoint completed intentional work locally.
 3. Stage only files related to the completed task.
 4. Check for secrets before committing.
@@ -91,27 +91,112 @@ With Magic Context active:
 - do not install Aegis Trail Standalone context heuristics
 - do not add duplicate compaction instructions
 - do not store real secrets or private customer data in `ctx_memory`, `ctx_note`, summaries, prompts, handoffs, or commits
-- keep Aegis Trail focused on git checkpoints, secret-safe commits, fallback handoffs, and no-auto-push policy
+- keep Aegis Trail focused on git checkpoints, secret-safe commits, numbered portable handoff history, and no-auto-push policy
 
 ## Handoff Policy
 
-Use OMO `/handoff` when available.
+Use the same clean portable handoff format as Aegis Trail Standalone.
 
-If Magic Context is active, rely on Magic Context for durable memory and recall. Keep a lightweight project handoff only when stopping after meaningful work, when the user requests it, or when a portable fallback is useful.
+A handoff is a numbered project history trail, not a disposable summary. Keep enough detail to track back what changed, why it changed, and which session made the decision if something goes wrong later.
 
-If the project uses a portable handoff folder, create or update the current session's handoff file. Do not create duplicate handoff files in the same session.
+Portable Aegis Trail handoffs go in:
 
-At minimum, the handoff should capture:
+```text
+HANDOFF_DOC/handoff-NNN.md
+```
 
-- user request
-- goal
-- work completed
-- pending work
-- git state
-- key files
-- decisions
-- blockers
-- continuation prompt
+Session rule:
+
+- The first handoff created in a session becomes the current session's handoff file.
+- If a handoff file was already created earlier in the same session, update that same file in place.
+- If no handoff file has been created in the current session, create `HANDOFF_DOC/` if missing, list existing `handoff-NNN.md` files, and create the next numbered file.
+- Do not create more than one handoff file per session.
+
+Use OMO `/handoff` when available, but do not let OMO or any other lifecycle layer replace the portable file when Aegis Trail needs a handoff. If Magic Context is active, rely on Magic Context for durable memory and recall while still using `HANDOFF_DOC/handoff-NNN.md` as the portable trackback history when stopping after meaningful work, when the user requests it, or when history state is useful.
+
+Automatic handoff triggers:
+
+- meaningful work is ending for the turn
+- the user asks for a handoff
+- the active lifecycle/context layer reports high context, critical context, compaction risk, or session degradation
+- agent-readable exact context usage is available and it is high or critical after completing the current task
+- exact context usage is not available to the agent, but observable session signals show the session is clearly long or complex after completed work
+- the agent is about to stop after important project work
+
+Do not ask the user for a context percentage and do not invent one. If exact context usage is not exposed to the agent, use heuristic labels only, based on observable signals such as completed tasks, files touched, tool calls, long conversation length, repeated confusion, degradation, or lifecycle warnings. This is not context management or compaction; it is only a safety trigger for portable handoff history.
+
+Do not interrupt work mid-task only to create a handoff. Finish the current task first, then checkpoint, create or update the handoff, tell the user to move to a new session, and stop.
+
+Use this format:
+
+```md
+HANDOFF CONTEXT
+===============
+
+SESSION INFO
+------------
+- Handoff number: NNN
+- Timestamp: YYYY-MM-DD HH:MM local timezone
+- Context level at handoff: exact percentage only if agent-readable; otherwise heuristic level plus observable basis
+- Tasks completed this session: N of M total
+
+USER REQUESTS AS-IS
+-------------------
+- [Exact verbatim user requests]
+
+GOAL
+----
+[One sentence objective]
+
+WORK COMPLETED THIS SESSION
+---------------------------
+- [x] Completed task
+
+WORK COMPLETED PREVIOUS SESSIONS
+--------------------------------
+- [x] Prior completed work, if known
+
+PENDING TASKS
+-------------
+- [ ] Next task <-- RESUME HERE
+
+GIT STATE
+---------
+- Branch: branch-name
+- Last commit: hash "message"
+- All changes committed: yes/no
+- Remote push status: pushed/not pushed/not configured
+
+KEY FILES
+---------
+- path - role
+
+IMPORTANT DECISIONS
+-------------------
+- Decision and reason
+
+PATTERNS AND CONVENTIONS
+------------------------
+- Project conventions
+
+EXPLICIT CONSTRAINTS
+--------------------
+- User constraints and technical constraints
+
+BLOCKERS AND WARNINGS
+---------------------
+- Known issues or None
+
+CONTEXT FOR CONTINUATION
+------------------------
+- What the next session needs to know
+
+NEXT SESSION PROMPT
+-------------------
+Continue working on [PROJECT NAME]. Read HANDOFF_DOC/handoff-NNN.md for full context. Resume from [NEXT TASK DESCRIPTION].
+```
+
+After saving the handoff, tell the user to move to a new session and include the continuation prompt. Do not start another task after handing off.
 
 ## Rescue Prompt
 

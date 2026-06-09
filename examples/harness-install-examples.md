@@ -2,6 +2,10 @@
 
 These examples show where an LLM coding agent should usually install Aegis Trail. They are not separate editions.
 
+For every harness below, the agent should read `INSTALL.md`, detect the project, ask the required scenario-specific setup questions, and wait for the user's answers before editing files. After all required answers are complete, the agent should start the install immediately.
+
+Do not offer Magic Context as a normal setup choice for every harness. CortexKit Magic Context is currently documented for OpenCode and Pi. For Codex CLI, VS Code agents, Cursor, Claude-style agents, or other non-OpenCode/non-Pi harnesses, recommend Aegis Trail Standalone unless another continuity/context layer is already active or the user explicitly asks to check CortexKit upstream first.
+
 ## Magic Context By CortexKit
 
 Recommended edition: Aegis Trail Lite / Magic Context compatibility mode.
@@ -15,7 +19,7 @@ AGENTS.md
 Use this prompt from the target project:
 
 ```text
-Install Aegis Trail Lite / Magic Context compatibility mode for this project. Read the Aegis Trail repo first. Keep Magic Context by CortexKit responsible for context management, memory, recall, historian/dreamer behavior, and compaction replacement. Do not install Aegis Trail Standalone context heuristics. Do not copy, vendor, fork, replace, or patch Magic Context. Add Aegis Trail rules for local git checkpoints, secret-safe staging and commits, no-auto-push defaults, fallback handoff, and rescue discipline. Never write real secrets or private customer data into ctx_memory, ctx_note, summaries, prompts, handoffs, or commits. Add missing ignore rules. Do not push unless I explicitly approve it.
+Install Aegis Trail Lite / Magic Context compatibility mode for this project. Read the Aegis Trail repo first. Keep Magic Context by CortexKit responsible for context management, memory, recall, historian/dreamer behavior, and compaction replacement. Do not install Aegis Trail Standalone context heuristics. Do not copy, vendor, fork, replace, or patch Magic Context. Add Aegis Trail rules for local git checkpoints, secret-safe staging and commits, no-auto-push defaults, a numbered HANDOFF_DOC/handoff-NNN.md trackback trail, and rescue discipline. Never write real secrets or private customer data into ctx_memory, ctx_note, summaries, prompts, handoffs, or commits. Add missing ignore rules. Do not push unless I explicitly approve it.
 ```
 
 Expected result:
@@ -23,7 +27,7 @@ Expected result:
 ```text
 Aegis Trail Lite / Magic Context compatibility mode installed in project instructions.
 Magic Context remains the context and memory manager.
-Aegis Trail adds checkpoint, secret, fallback handoff, and push-safety discipline.
+Aegis Trail adds checkpoint, secret, numbered handoff history, and push-safety discipline.
 ```
 
 ## OMO / Oh-My-Openagent / Oh-My-Opencode
@@ -39,7 +43,7 @@ AGENTS.md
 Use this prompt from the target project:
 
 ```text
-Install Aegis Trail Lite for this OMO project. Read the Aegis Trail repo first. Add the Lite rules to AGENTS.md or the existing project instruction file. Do not modify OMO internals, generated prompts, node_modules, package-managed files, or hidden agent internals. Keep OMO responsible for tasks, /handoff, /start-work, compaction, and continuation. Add missing ignore rules for HANDOFF_DOC/, .credentials/, private/, .env, local databases, exports, backups, cache, temp, and logs. Do not push unless I explicitly approve it.
+Install Aegis Trail Lite for this OMO project. Read the Aegis Trail repo first. Add the Lite rules to AGENTS.md or the existing project instruction file. Do not modify OMO internals, generated prompts, node_modules, package-managed files, or hidden agent internals. Keep OMO responsible for tasks, /handoff, /start-work, compaction, and continuation. Add the numbered HANDOFF_DOC/handoff-NNN.md trackback trail and missing ignore rules for HANDOFF_DOC/, .credentials/, private/, .env, local databases, exports, backups, cache, temp, and logs. Do not push unless I explicitly approve it.
 ```
 
 Expected result:
@@ -47,7 +51,7 @@ Expected result:
 ```text
 Aegis Trail Lite installed in project instructions.
 OMO remains the lifecycle manager.
-Aegis Trail adds checkpoint, secret, and rescue discipline.
+Aegis Trail adds checkpoint, secret, numbered handoff history, and rescue discipline.
 ```
 
 ## Opencode Without OMO
@@ -63,7 +67,7 @@ AGENTS.md
 Use this prompt from the target project:
 
 ```text
-Install Aegis Trail for this opencode project. If there is no OMO, Magic Context, or equivalent continuity layer, install Aegis Trail Standalone in AGENTS.md. If a continuity/context layer already handles handoff, compaction, memory, and task persistence, install Aegis Trail Lite instead. Add missing ignore rules. Do not modify hidden opencode internals or generated/package-managed files. Do not push unless I explicitly approve it.
+Install Aegis Trail for this opencode project. If there is no OMO, Magic Context, or equivalent continuity layer, install Aegis Trail Standalone in AGENTS.md. If a continuity/context layer already handles handoff, compaction, memory, and task persistence, install Aegis Trail Lite instead. Add the numbered HANDOFF_DOC/handoff-NNN.md trackback trail and missing ignore rules. Do not modify hidden opencode internals or generated/package-managed files. Do not push unless I explicitly approve it.
 ```
 
 ## Codex CLI

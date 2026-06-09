@@ -6,3 +6,11 @@ Copy and paste this into the coding agent from the target project.
 Install Aegis Trail for this project.
 https://raw.githubusercontent.com/michaelxer/aegis-trail/refs/heads/main/INSTALL.md
 ```
+
+Expected agent behavior:
+
+- Read `INSTALL.md` and the referenced source files.
+- Detect the project instruction file and continuity/context layer.
+- Ask the scenario-specific setup questions before editing files.
+- Start the install immediately after the required answers are complete.
+- Do not install Magic Context automatically.

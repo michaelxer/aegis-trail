@@ -12,6 +12,8 @@ A session is one continuous conversation thread.
 
 The first handoff created in a session becomes the current session's handoff file.
 
+Handoffs are numbered project history records, not disposable summaries. Preserve enough detail to track back what changed, why it changed, and which session made the decision if something goes wrong later.
+
 - If a handoff file was already created earlier in the same session, update that same file in place.
 - If no handoff file has been created in the current session, create the next numbered handoff file.
 - Do not create more than one handoff file per session.
@@ -131,9 +133,9 @@ Only commit sample files if they contain fake/demo data.
 
 Skip this section when Magic Context or another context manager is active. The active context manager should own context usage, compaction replacement, recall, and memory.
 
-If the harness provides exact context usage, use the exact percentage.
+If the harness exposes exact context usage to the agent, use the exact percentage.
 
-If exact usage is not available, estimate after completed work using these signals:
+If exact usage is not available to the agent, do not ask the user for a percentage and do not invent one. Automatically classify the session with heuristic labels after completed work using observable signals:
 
 | Signal | Low | Medium | High | Critical |
 | --- | --- | --- | --- | --- |
@@ -142,7 +144,7 @@ If exact usage is not available, estimate after completed work using these signa
 | Files touched | <10 | 10-20 | 20-35 | 35+ |
 | Tool calls | <30 | 30-60 | 60-100 | 100+ |
 
-If two or more signals are high, finish the current task, checkpoint, create/update handoff, and stop.
+If two or more signals are high, or any signal is critical, finish the current task, checkpoint, create/update handoff, tell the user to move to a new session, and stop.
 
 Never interrupt a task mid-flight only to create a handoff. Finish the current task first.
 
@@ -150,10 +152,11 @@ Never interrupt a task mid-flight only to create a handoff. Finish the current t
 
 Create or update a handoff when:
 
-- context is high or critical after completing a task
+- agent-readable exact context or heuristic context level is high or critical after completing a task
 - meaningful work is ending for the turn
 - the user asks for a handoff
 - the agent notices context degradation
+- agent-readable host/lifecycle warnings show context pressure
 - the session is about to stop after important project work
 
 Do not start a new task after deciding to hand off.
@@ -161,6 +164,8 @@ Do not start a new task after deciding to hand off.
 ## 7. Handoff Procedure
 
 Use `HANDOFF_DOC/handoff-NNN.md` for portable handoffs.
+
+Keep previous numbered handoff files intact. They are the project history trail for debugging regressions, wrong decisions, and lost context.
 
 If this session already has a handoff file, update that same file in place.
 
@@ -181,7 +186,7 @@ SESSION INFO
 ------------
 - Handoff number: NNN
 - Timestamp: YYYY-MM-DD HH:MM local timezone
-- Context level at handoff: estimated percentage or heuristic level
+- Context level at handoff: exact percentage only if agent-readable; otherwise heuristic level plus observable basis
 - Tasks completed this session: N of M total
 
 USER REQUESTS AS-IS
@@ -234,6 +239,10 @@ BLOCKERS AND WARNINGS
 CONTEXT FOR CONTINUATION
 ------------------------
 - What the next session needs to know
+
+NEXT SESSION PROMPT
+-------------------
+Continue working on [PROJECT NAME]. Read HANDOFF_DOC/handoff-NNN.md for full context. Resume from [NEXT TASK DESCRIPTION].
 ```
 
 After saving the handoff, output a continuation prompt:
@@ -245,7 +254,7 @@ NEXT SESSION - copy and paste this into a new chat:
 Continue working on [PROJECT NAME]. Read HANDOFF_DOC/handoff-NNN.md for full context. Resume from [NEXT TASK DESCRIPTION].
 ```
 
-Then stop.
+Tell the user to move to a new session, then stop.
 
 ## 8. Rescue Procedure
 

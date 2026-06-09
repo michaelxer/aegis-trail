@@ -13,11 +13,28 @@ data/
 *.db
 *.sqlite
 *.sqlite3
+imports_original/
 exports/
 backups/
 cache/
 temp/
 logs/
+local_profiles/
+local_imports/
+local_exports/
+local_backups/
+
+# Common private data files
+*.xlsx
+*.xls
+*.csv
+*.jsonl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
 
 # OS/editor
 .DS_Store

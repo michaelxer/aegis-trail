@@ -2,15 +2,17 @@
 
 Aegis Trail is designed to complement [Magic Context by CortexKit](https://github.com/cortexkit/magic-context), not replace it.
 
-Magic Context describes itself as self-managing context and memory for coding agents. It handles context management, project memory, recall, historian/dreamer behavior, and compaction replacement.
+Magic Context describes itself as self-managing context and memory for coding agents. It handles context management, project memory, recall, historian/dreamer behavior, and compaction replacement. Its upstream setup currently documents OpenCode and Pi harness support.
 
-Aegis Trail handles a different lane: local git checkpoints, secret-safe staging and commits, no-auto-push policy, fallback handoffs, and rescue discipline.
+Aegis Trail handles a different lane: local git checkpoints, secret-safe staging and commits, no-auto-push policy, numbered portable handoff history, and rescue discipline.
 
 ## Upstream-First Policy
 
 Do not copy, vendor, fork, or replace Magic Context as part of a normal Aegis Trail install.
 
 Aegis Trail's LLM install prompt does not install Magic Context automatically by default. It only detects Magic Context when it is already present and then installs Aegis Trail compatibility rules.
+
+If Magic Context is not detected in an OpenCode or Pi project, the Aegis Trail installer should say so in its guided questions before editing. The user can then proceed without Magic Context, stop, or explicitly ask for a separate upstream Magic Context setup first. For Codex CLI, VS Code agents, Cursor, Claude-style agents, or other non-OpenCode/non-Pi harnesses, do not offer Magic Context as a normal setup choice unless the user explicitly asks to check CortexKit upstream first.
 
 Use CortexKit upstream for Magic Context:
 
@@ -51,7 +53,7 @@ When Magic Context is detected, install Aegis Trail Lite / Magic Context compati
 | Local git checkpoints | Aegis Trail |
 | Secret-safe staging and commits | Aegis Trail |
 | No-auto-push default | Aegis Trail |
-| Fallback handoff | Aegis Trail |
+| Numbered portable handoff trail | Aegis Trail |
 | Rescue discipline | Aegis Trail |
 
 ## Install Rules

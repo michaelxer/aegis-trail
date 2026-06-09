@@ -22,7 +22,7 @@ After completing meaningful work:
 5. Commit completed intentional work locally with a concise conventional message.
 6. Do not push unless the user explicitly approves pushing for this repo.
 
-Before stopping after meaningful work, create or update one handoff file for the session at `HANDOFF_DOC/handoff-NNN.md`. Include the user request, goal, completed work, pending work, git state, key files, decisions, blockers, and the exact continuation prompt.
+Before stopping after meaningful work, or automatically when agent-readable exact context or heuristic context level is high/critical after a completed task, create or update one handoff file for the session at `HANDOFF_DOC/handoff-NNN.md`. Do not ask the user for a context percentage and do not invent one. Include the user request, goal, completed work, pending work, git state, key files, decisions, blockers, and the exact continuation prompt. After saving the handoff, tell the user to move to a new session and stop.
 
 Never write real secrets into source files, handoff files, plans, summaries, prompts, commits, or memory tools. Store private values only in ignored local files such as `.env`, `.credentials/`, or `private/`.
 

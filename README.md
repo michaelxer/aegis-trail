@@ -10,7 +10,7 @@ It is installed as project-level guidance beside systems like OMO, opencode, Cod
 
 Aegis Trail is designed to complement [Magic Context by CortexKit](https://github.com/cortexkit/magic-context).
 
-Magic Context handles self-managing context, project memory, recall, historian/dreamer behavior, and compaction replacement. Aegis Trail handles local checkpoint safety, secret-safe staging and commits, no-auto-push policy, fallback handoffs, and rescue discipline.
+Magic Context handles self-managing context, project memory, recall, historian/dreamer behavior, and compaction replacement. Aegis Trail handles local checkpoint safety, secret-safe staging and commits, no-auto-push policy, numbered portable handoff history, and rescue discipline.
 
 Aegis Trail also works beside OMO / oh-my-openagent / oh-my-opencode. OMO handles agent orchestration, tasks, handoff, compaction, and continuation in OMO projects. Aegis Trail Lite complements it with git checkpoint discipline, secret safety, and no-auto-push defaults.
 
@@ -20,9 +20,9 @@ Aegis Trail does not vendor, copy, fork, or replace Magic Context or OMO by defa
 
 | Edition | Best For | Purpose |
 | --- | --- | --- |
-| Aegis Trail Lite | OMO, Magic Context, or another strong continuity/context layer | Adds the missing safety layer: git checkpoint discipline, secret protection, no-auto-push defaults, and lightweight handoff/rescue rules. |
+| Aegis Trail Lite | OMO, Magic Context, or another strong continuity/context layer | Adds the missing safety layer: git checkpoint discipline, secret protection, no-auto-push defaults, and a numbered portable handoff trail. |
 | Aegis Trail Standalone | Codex CLI, VS Code agents, Cursor, Claude-style agents, vanilla/non-OMO setups | The full Aegis Trail workflow for environments without durable session lifecycle support. It carries its own context monitoring, handoff format, checkpoint rules, and rescue protocol. |
-| Aegis Trail Magic Context Compatibility | Projects with `magic-context.jsonc` or CortexKit Magic Context packages/plugins | A Lite install profile that lets Magic Context own context and memory while Aegis Trail owns git, secrets, handoff fallback, and push safety. |
+| Aegis Trail Magic Context Compatibility | Projects with `magic-context.jsonc` or CortexKit Magic Context packages/plugins | A Lite install profile that lets Magic Context own context and memory while Aegis Trail owns git, secrets, numbered handoff history, and push safety. |
 
 Standalone is not the "better" edition. It is the self-contained edition for environments that do not already provide OMO-style continuity or Magic Context-style memory. For OMO or Magic Context projects, Lite/compatibility mode is usually the right choice because it avoids duplicate lifecycle and compaction rules.
 
@@ -39,15 +39,15 @@ Aegis Trail creates recovery anchors before that happens:
 | Recovery Anchor | What It Protects |
 | --- | --- |
 | Local git commit | Code and file changes survive context loss. |
-| Handoff file | The next agent knows what happened and where to resume. |
+| Handoff file | The next agent knows what happened and where to resume, while older numbered handoffs remain a trackback history for debugging wrong changes and decisions. |
 | Secret scan | Private data is not accidentally committed, memorized, or pushed. |
 | Rescue protocol | A new session can reconstruct state from git, handoff files, task state, and available memory/context tools. |
 
 ## Common Scenarios
 
-Use Aegis Trail Lite when an OMO project already has `/handoff`, `/start-work`, persisted tasks, and compaction support. Lite tells the agent to keep using OMO while adding local git checkpoints and secret discipline.
+Use Aegis Trail Lite when an OMO project already has `/handoff`, `/start-work`, persisted tasks, and compaction support. Lite tells the agent to keep using OMO while adding local git checkpoints, secret discipline, and a numbered `HANDOFF_DOC/handoff-NNN.md` trackback trail.
 
-Use Aegis Trail Magic Context Compatibility when Magic Context is installed. Magic Context should own context, memory, recall, historian/dreamer behavior, and compaction replacement. Aegis Trail should only add safety rails around git, secrets, fallback handoff, and pushing.
+Use Aegis Trail Magic Context Compatibility when Magic Context is installed. Magic Context should own context, memory, recall, historian/dreamer behavior, and compaction replacement. Aegis Trail should only add safety rails around git, secrets, numbered handoff history, and pushing.
 
 Use Aegis Trail Standalone when the host agent does not have a durable session lifecycle. Standalone tells the agent when to checkpoint, when to hand off, what the handoff must contain, and how a new session should recover.
 
@@ -62,7 +62,7 @@ Use the rescue prompt when a session already lost context. The next agent should
 | Never push unless explicitly allowed | Yes | Yes | Yes |
 | Optional private checkpoint push policy | Yes | Yes | Yes |
 | Host lifecycle/context manager stays in charge | Yes | Yes, Magic Context | No dependency |
-| Full handoff template | Optional | Fallback only | Built in |
+| Numbered portable handoff trail | Yes | Yes | Yes |
 | Manual context heuristics | No | No | Yes |
 | Magic Context memory secret rules | Compatible | Built in | Only if Magic Context is added later |
 | Rescue workflow after context failure | Yes | Yes | Yes |
@@ -72,9 +72,11 @@ Use the rescue prompt when a session already lost context. The next agent should
 
 Installation is intentionally done by an LLM coding agent, not by a fragile shell script or `npx` package.
 
-Aegis Trail does not install Magic Context automatically by default. For opencode projects that need memory/context support, install Magic Context from CortexKit upstream first, then run the Aegis Trail install prompt so the agent detects Magic Context and installs Lite/compatibility mode.
+The short prompt points the agent at `INSTALL.md`. The agent should read the install guide, detect the project, then ask OMC-style setup questions before editing files. The questions should cover the detected harness, instruction target, Magic Context status when relevant, selected edition, expected file changes, and git behavior. After the user answers the required questions, the agent should start the install immediately.
 
-Paste the short prompt from `prompts/install-with-llm-agent.md` into the agent that manages your target project. The agent should read `INSTALL.md`, detect your environment, and install the right edition into the correct project instruction file.
+Aegis Trail does not install Magic Context automatically by default. Magic Context is a separate CortexKit upstream project currently documented for OpenCode and Pi. For OpenCode or Pi projects that need memory/context support, install Magic Context from CortexKit upstream first, then run the Aegis Trail install prompt so the agent detects Magic Context and installs Lite/compatibility mode. For Codex CLI, VS Code agents, Cursor, and Claude-style agents, Aegis Trail should not offer Magic Context as a normal setup choice unless the user explicitly asks to check CortexKit upstream first.
+
+Paste the short prompt from `prompts/install-with-llm-agent.md` into the agent that manages your target project. The agent should read `INSTALL.md`, detect your environment, ask the scenario-specific setup questions, and install the right edition into the correct project instruction file only after the required answers are complete.
 
 Recommended defaults:
 
@@ -82,7 +84,7 @@ Recommended defaults:
 | --- | --- |
 | Magic Context by CortexKit | Aegis Trail Lite / Magic Context Compatibility |
 | OMO / oh-my-openagent / oh-my-opencode | Aegis Trail Lite |
-| opencode without OMO or Magic Context | Aegis Trail Standalone or Lite, depending on how much automation you want |
+| opencode without OMO, Magic Context, or another continuity layer | Aegis Trail Standalone |
 | Codex CLI | Aegis Trail Standalone |
 | VS Code agent workflows | Aegis Trail Standalone |
 | Cursor / Claude-style agents | Aegis Trail Standalone |
@@ -99,6 +101,8 @@ Paste this into your LLM coding agent session from the project you want to prote
 Install Aegis Trail for this project.
 https://raw.githubusercontent.com/michaelxer/aegis-trail/refs/heads/main/INSTALL.md
 ```
+
+The agent should respond with a short install preview and wait for your answer before changing files.
 
 ## Files
 
@@ -128,9 +132,13 @@ Default behavior:
 
 ```text
 Auto local commit: yes, after completed meaningful work.
-Auto handoff: yes, before stopping meaningful work.
+Auto handoff: yes, before stopping meaningful work or when agent-readable context signals are high/critical after completed work.
 Auto remote push: no, unless explicitly approved per project.
 ```
+
+Aegis Trail does not require the user to expose a context percentage. If the host exposes exact usage to the agent, use it. Otherwise, automate from heuristic labels based on observable signals such as completed tasks, files touched, tool calls, long conversation length, lifecycle warnings, and model degradation. Do not invent fake percentages.
+
+After saving a handoff, the agent should tell the user to move to a new session and include the continuation prompt.
 
 If remote backup is needed, prefer a private checkpoint branch such as:
 
